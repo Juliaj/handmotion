@@ -175,7 +175,7 @@ def main():
 
     # Train model
     logger.info("Training classifier...")
-    x_train, x_test, y_train, y_test = classifier.train(features, labels, test_size=args.test_size)
+    x_train, x_test, _y_train, y_test = classifier.train(features, labels, test_size=args.test_size)
     logger.info(f"Training set: {len(x_train)} samples, Test set: {len(x_test)} samples")
 
     # Evaluate model

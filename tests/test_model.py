@@ -87,7 +87,7 @@ class TestHandGestureClassifier:
         from conftest import create_test_npz
 
         classifier = HandGestureClassifier()
-        data_path, landmarks, finger_states, labels = create_test_npz(tmp_path, n_samples=10)
+        data_path, _landmarks, _finger_states, labels = create_test_npz(tmp_path, n_samples=10)
 
         features, loaded_labels = classifier.load_data(data_path)
 
@@ -123,7 +123,7 @@ class TestHandGestureClassifier:
         features = np.random.rand(100, 68)
         labels = np.array(["rock", "paper", "scissors"] * 33 + ["rock"])
 
-        X_train, X_test, y_train, y_test = classifier.train(features, labels, test_size=0.3)
+        X_train, X_test, _y_train, _y_test = classifier.train(features, labels, test_size=0.3)
 
         assert len(X_train) == 70
         assert len(X_test) == 30
