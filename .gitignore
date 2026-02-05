@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.env
+.venv
+venv/
+ENV/
+
+# Testing
+.pytest_cache/
+.cache
+
+# Ruff
+.ruff_cache/
+
+# Pixi
+.pixi
+
+# Models (large files)
+models/*.task
+!models/.gitkeep
+
+# Data files (large binary files)
+# Ignore .jpg images in data subfolders, but allow .zip files
+# Allow .npz files (processed features are small and useful for reproducibility)
+data/**/*.jpg
