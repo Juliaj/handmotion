@@ -87,6 +87,23 @@ class FeatureExtractor:
         )
         self.hand_landmarker = vision.HandLandmarker.create_from_options(options)
 
+    def close(self):
+        """Close MediaPipe hand landmarker and release resources."""
+        if hasattr(self, "hand_landmarker") and self.hand_landmarker is not None:
+            try:
+                self.hand_landmarker.close()
+            except Exception:
+                pass  # Ignore errors during cleanup
+            self.hand_landmarker = None
+
+    def __enter__(self):
+        """Context manager entry."""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Context manager exit - ensures cleanup."""
+        self.close()
+
     def extract(self, image, image_format="rgb") -> Optional[HandFeatures | None]:
         """
         Extract features from image.

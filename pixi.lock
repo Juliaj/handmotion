@@ -572,7 +572,7 @@ packages:
 - pypi: ./
   name: handmotion
   version: 0.0.1
-  sha256: 89c625e5cc16a31ecff1885228e33dcecea9447a83fa57113119ba11273bb10e
+  sha256: a30a866ccc57156cde26631dbf64d63a4cb48c8cf26df1a698263ddf54a45240
   requires_python: '>=3.12,<3.13'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/icu-78.2-h33c6efd_0.conda
   sha256: 142a722072fa96cf16ff98eaaf641f54ab84744af81754c292cb81e0881c0329

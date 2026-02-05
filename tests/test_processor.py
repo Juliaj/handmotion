@@ -15,7 +15,7 @@
 """Unit tests for data processor."""
 
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import numpy as np
 import pytest
@@ -29,24 +29,29 @@ class TestDataProcessor:
 
     def test_init(self):
         """Test DataProcessor initialization."""
-        processor = DataProcessor()
-        assert processor.extractor is not None
+        # Mock FeatureExtractor to avoid slow MediaPipe initialization
+        with patch("handmotion.data.processor.FeatureExtractor"):
+            processor = DataProcessor()
+            assert processor.extractor is not None
 
     def test_process_folder_nonexistent(self):
         """Test process_folder raises error for nonexistent folder."""
-        processor = DataProcessor()
-        with pytest.raises(ValueError, match="Folder does not exist"):
-            processor.process_folder("/nonexistent/path", "test")
+        with patch("handmotion.data.processor.FeatureExtractor"):
+            processor = DataProcessor()
+            with pytest.raises(ValueError, match="Folder does not exist"):
+                processor.process_folder("/nonexistent/path", "test")
 
     def test_process_folder_empty(self, tmp_path):
         """Test process_folder returns empty list for folder with no images."""
-        processor = DataProcessor()
-        result = processor.process_folder(tmp_path, "test")
-        assert result == []
+        with patch("handmotion.data.processor.FeatureExtractor"):
+            processor = DataProcessor()
+            result = processor.process_folder(tmp_path, "test")
+            assert result == []
 
     def test_process_folder_with_images(self, tmp_path):
         """Test process_folder processes images successfully."""
-        processor = DataProcessor()
+        with patch("handmotion.data.processor.FeatureExtractor"):
+            processor = DataProcessor()
 
         # Create test images
         image1 = Image.new("RGB", (100, 100), color="red")
@@ -71,29 +76,39 @@ class TestDataProcessor:
 
     def test_process_folder_skips_no_hand(self, tmp_path):
         """Test process_folder skips images with no hand detected."""
-        processor = DataProcessor()
+        mock_extractor = MagicMock()
+        mock_extractor.extract.return_value = None
 
-        image = Image.new("RGB", (100, 100))
-        image.save(tmp_path / "test.jpg")
+        with patch("handmotion.data.processor.FeatureExtractor", return_value=mock_extractor):
+            processor = DataProcessor()
 
-        with patch.object(processor.extractor, "extract", return_value=None):
+            image = Image.new("RGB", (100, 100))
+            image.save(tmp_path / "test.jpg")
+
             result = processor.process_folder(tmp_path, "paper")
             assert result == []
 
     def test_process_folder_handles_errors(self, tmp_path):
         """Test process_folder handles processing errors gracefully."""
-        processor = DataProcessor()
+        # Create a mock extractor instance
+        mock_extractor = MagicMock()
+        mock_extractor.extract.side_effect = Exception("Test error")
 
-        image = Image.new("RGB", (100, 100))
-        image.save(tmp_path / "test.jpg")
+        # Mock FeatureExtractor class to return our mock instance
+        with patch("handmotion.data.processor.FeatureExtractor", return_value=mock_extractor):
+            processor = DataProcessor()
 
-        with patch.object(processor.extractor, "extract", side_effect=Exception("Test error")):
+            image = Image.new("RGB", (100, 100))
+            image.save(tmp_path / "test.jpg")
+
             result = processor.process_folder(tmp_path, "scissors")
             assert result == []
 
     def test_save(self, tmp_path):
         """Test save writes npz file correctly."""
-        processor = DataProcessor()
+        # Mock FeatureExtractor to avoid MediaPipe initialization
+        with patch("handmotion.data.processor.FeatureExtractor"):
+            processor = DataProcessor()
 
         # Create test data
         features1 = {
@@ -130,13 +145,17 @@ class TestDataProcessor:
 
     def test_save_empty_data(self):
         """Test save raises error for empty data."""
-        processor = DataProcessor()
-        with pytest.raises(ValueError, match="Cannot save empty data"):
-            processor.save([], "output.npz")
+        # Mock FeatureExtractor to avoid MediaPipe initialization
+        with patch("handmotion.data.processor.FeatureExtractor"):
+            processor = DataProcessor()
+            with pytest.raises(ValueError, match="Cannot save empty data"):
+                processor.save([], "output.npz")
 
     def test_save_creates_parent_dirs(self, tmp_path):
         """Test save creates parent directories if needed."""
-        processor = DataProcessor()
+        # Mock FeatureExtractor to avoid MediaPipe initialization
+        with patch("handmotion.data.processor.FeatureExtractor"):
+            processor = DataProcessor()
 
         features = {
             "landmarks": np.random.rand(21, 3),
@@ -154,7 +173,8 @@ class TestDataProcessor:
 
     def test_process_folder_multiple_formats(self, tmp_path):
         """Test process_folder handles multiple image formats."""
-        processor = DataProcessor()
+        with patch("handmotion.data.processor.FeatureExtractor"):
+            processor = DataProcessor()
 
         # Create images in different formats
         Image.new("RGB", (50, 50)).save(tmp_path / "test1.jpg")

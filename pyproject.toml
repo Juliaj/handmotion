@@ -80,9 +80,15 @@ convention = "numpy"
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "handmotion"]
-addopts = "--doctest-modules --timeout=300"
+addopts = "--doctest-modules --timeout=300 -W ignore::pytest.PytestUnraisableExceptionWarning"
 doctest_optionflags = "NORMALIZE_WHITESPACE"
 timeout = 300
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
+filterwarnings = [
+    "ignore::pytest.PytestUnraisableExceptionWarning",
+]
 
 [tool.hatchling.build.targets.wheel]
 packages = ["handmotion"]

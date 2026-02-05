@@ -37,4 +37,5 @@ jobs:
       - run: pixi run fmt
       - run: pixi run lint
       - run: pixi run types
-      - run: pixi run test -m "not slow"
+      - name: Run tests
+        run: pixi run test -m "not slow" -v --tb=short --timeout=60

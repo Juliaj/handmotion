@@ -71,6 +71,16 @@ def mock_classifier():
     return mock_clf
 
 
+@pytest.fixture(autouse=True)
+def cleanup_mediapipe():
+    """Auto-cleanup fixture to ensure MediaPipe resources are released."""
+    yield
+    # Force garbage collection to trigger cleanup
+    import gc
+
+    gc.collect()
+
+
 def create_test_npz(tmp_path, n_samples=10):
     """Helper to create test npz file."""
     landmarks = np.random.rand(n_samples, 21, 3)
