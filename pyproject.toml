@@ -15,19 +15,26 @@ platforms = ["linux-64", "linux-aarch64"]
 
 [tool.pixi.pypi-dependencies]
 handmotion = { path = ".", editable = true }
+joblib = "*"
 mediapipe = "*"
 numpy = "*"
 pillow = "*"
+scikit-learn = "*"
 
 [tool.pixi.environments]
 default = { solve-group = "default" }
 dev = { features = ["dev"], solve-group = "default"}
 
+[tool.pixi.feature.dev.activation]
+# Clean PYTHONPATH to remove system ROS Python packages
+# Keep only conda environment paths, once we have install/setup.bash, we may need following fix
+env = { PYTHONPATH = "${CONDA_PREFIX}/lib/python/site-packages:${CONDA_PREFIX}/lib/python3.12/site-packages" }
+
 [tool.pixi.feature.dev.tasks]
-fmt = { cmd="ruff format .", clean-env = true }
-lint = { cmd="ruff check . --fix", clean-env = true }
-types = { cmd="ty check", clean-env = true }
-test = { cmd="pytest", clean-env = true }
+fmt = { cmd = "ruff format ." }
+lint = { cmd = "ruff check . --fix" }
+types = { cmd = "ty check" }
+test = { cmd = "pytest" }
 pre-commit = { cmd="pre-commit run --all-files" }
 pre-commit-install = { cmd="pre-commit install" }
 all = { depends-on = ["fmt", "lint", "types", "test"] }
@@ -39,14 +46,6 @@ pre-commit = ">=4.2"
 
 [tool.pixi.feature.dev.pypi-dependencies]
 ty = "*"
-
-# Unset ROS2 environment variables to avoid tool conflicts when
-# ROS2 setup scripts are sourced in .bashrc (e.g., source /opt/ros/jazzy/setup.bash)
-[tool.pixi.activation]
-scripts = ["scripts/unset_ros2_env.sh"]
-
-[tool.pixi.feature.dev.activation]
-scripts = ["scripts/unset_ros2_env.sh"]
 
 [tool.ruff]
 line-length = 100

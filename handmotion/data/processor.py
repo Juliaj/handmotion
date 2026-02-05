@@ -128,3 +128,19 @@ class DataProcessor:
         )
 
         logger.info(f"Saved {len(data)} samples to {output_path}")
+
+
+def main():
+    """Main function to process data."""
+    processor = DataProcessor()
+    cwd = Path.cwd()
+
+    results = processor.process_folder(cwd / "data" / "raw" / "rps" / "rock", "rock")
+    results.extend(processor.process_folder(cwd / "data" / "raw" / "rps" / "paper", "paper"))
+    results.extend(processor.process_folder(cwd / "data" / "raw" / "rps" / "scissors", "scissors"))
+    processor.save(results, cwd / "data" / "processed" / "rps" / "data.npz")
+    print(f"Processed {len(results)} samples")
+
+
+if __name__ == "__main__":
+    main()
