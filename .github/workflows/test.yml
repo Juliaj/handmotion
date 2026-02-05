@@ -28,6 +28,12 @@ jobs:
           cache: true
           environments: dev
 
+      - name: Download hand landmarker model
+        run: |
+          mkdir -p models
+          curl -L -o models/hand_landmarker.task \
+            https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task
+
       - run: pixi run fmt
       - run: pixi run lint
       - run: pixi run types
