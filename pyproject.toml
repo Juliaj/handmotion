@@ -41,6 +41,7 @@ all = { depends-on = ["fmt", "lint", "types", "test"] }
 
 [tool.pixi.feature.dev.dependencies]
 pytest = ">=8.3"
+pytest-timeout = ">=2.2"
 ruff = ">=0.11"
 pre-commit = ">=4.2"
 
@@ -79,8 +80,9 @@ convention = "numpy"
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "handmotion"]
-addopts = "--doctest-modules"
+addopts = "--doctest-modules --timeout=300"
 doctest_optionflags = "NORMALIZE_WHITESPACE"
+timeout = 300
 
 [tool.hatchling.build.targets.wheel]
 packages = ["handmotion"]

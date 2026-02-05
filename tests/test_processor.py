@@ -175,6 +175,7 @@ class TestDataProcessor:
             # Should process 3 images, ignore txt file
             assert len(result) == 3
 
+    @pytest.mark.slow
     def test_process_folder_with_real_images(self):
         """Test process_folder with actual RPS images from test data folder."""
         processor = DataProcessor()
@@ -202,6 +203,7 @@ class TestDataProcessor:
                     assert features["landmarks"].shape == (21, 3)
                     assert features["finger_states"].shape == (5,)
 
+    @pytest.mark.slow
     def test_process_folder_multiple_labels(self):
         """Test processing multiple folders with different labels."""
         processor = DataProcessor()
