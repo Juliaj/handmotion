@@ -85,7 +85,9 @@ class FeatureExtractor:
             min_hand_presence_confidence=0.5,
             min_tracking_confidence=0.5,
         )
-        self.hand_landmarker = vision.HandLandmarker.create_from_options(options)
+        self.hand_landmarker: vision.HandLandmarker | None = (
+            vision.HandLandmarker.create_from_options(options)
+        )
 
     def close(self):
         """Close MediaPipe hand landmarker and release resources."""
@@ -104,7 +106,7 @@ class FeatureExtractor:
         """Context manager exit - ensures cleanup."""
         self.close()
 
-    def extract(self, image, image_format="rgb") -> Optional[HandFeatures | None]:
+    def extract(self, image, image_format="rgb") -> Optional[HandFeatures]:
         """
         Extract features from image.
 
@@ -136,6 +138,12 @@ class FeatureExtractor:
                 image = image.convert("RGB")
             image_array = np.array(image)
             mp_image = Image(image_format=ImageFormat.SRGB, data=image_array)
+
+        if self.hand_landmarker is None:
+            raise RuntimeError(
+                "FeatureExtractor is closed. Create a new FeatureExtractor instance to extract "
+                "features."
+            )
 
         # Detect hand landmarks
         detection_result = self.hand_landmarker.detect(mp_image)

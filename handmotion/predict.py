@@ -45,7 +45,7 @@ def _extract_and_predict(
     classifier: HandGestureClassifier,
     image: Union[Image.Image, str, Path],
     image_format: str = "rgb",
-) -> Tuple[Optional[str], Optional[np.ndarray], Optional[list]]:
+) -> Tuple[Optional[str], Optional[np.ndarray], Optional[np.ndarray]]:
     """
     Internal helper to extract features and get predictions.
 
@@ -107,7 +107,7 @@ def predict_image(
         - Confidence below threshold
     """
     prediction, probabilities, class_names = _extract_and_predict(classifier, image, image_format)
-    if prediction is None:
+    if prediction is None or probabilities is None or class_names is None:
         logger.debug("No hand detected in image")
         return None, None
 
@@ -140,7 +140,7 @@ def predict_image_with_proba(
         Tuple of (predicted_label, confidence_dict) or (None, None) if no hand detected
     """
     prediction, probabilities, class_names = _extract_and_predict(classifier, image, image_format)
-    if prediction is None:
+    if prediction is None or probabilities is None or class_names is None:
         logger.warning("No hand detected in image")
         return None, None
 
@@ -195,6 +195,7 @@ def main():
         if prediction is None:
             print("No hand detected in image.")
             return
+        assert confidence is not None
         print(f"\nPrediction: {prediction}")
         print(f"Confidence: {confidence[prediction]:.4f}")
         print("\nAll class probabilities:")

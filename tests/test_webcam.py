@@ -70,6 +70,7 @@ def test_webcam_capture_and_predict():
 
         if prediction is None:
             pytest.skip("No hand detected in frame or confidence below threshold")
+        assert confidence is not None
 
         # Validate prediction
         class_names = classifier.label_encoder.classes_
