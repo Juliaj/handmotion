@@ -716,8 +716,8 @@ packages:
   requires_python: '>=3.10'
 - pypi: ./
   name: handmotion
-  version: 0.0.1
-  sha256: c06afc1f29cf2ae0cc4d86757fbcb809bc1225a1ec7cb0c4f9c6d52f758cc35e
+  version: 0.0.2
+  sha256: 89207c15b3d1d1a7c36fda3c843b030ff7c5633998059923793a48a0ad83a505
   requires_dist:
   - joblib
   - mediapipe

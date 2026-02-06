@@ -1,7 +1,7 @@
 [project]
 name = "handmotion"
 description = "handmotion"
-version = "0.0.1"
+version = "0.0.2"
 readme = "README.md"
 keywords = []
 authors = [{name = "Julia Jia"}]
@@ -97,6 +97,7 @@ doctest_optionflags = "NORMALIZE_WHITESPACE"
 timeout = 300
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "manual: marks tests as manual (excluded from CI)",
 ]
 filterwarnings = [
     "ignore::pytest.PytestUnraisableExceptionWarning",

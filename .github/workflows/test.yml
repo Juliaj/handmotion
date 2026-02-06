@@ -38,4 +38,4 @@ jobs:
       - run: pixi run lint
       - run: pixi run types
       - name: Run tests
-        run: pixi run test -m "not slow" -v --tb=short --timeout=60
+        run: pixi run test -m "not slow and not manual" -v --tb=short --timeout=60
