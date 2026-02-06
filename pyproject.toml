@@ -6,6 +6,13 @@ readme = "README.md"
 keywords = []
 authors = [{name = "Julia Jia"}]
 requires-python = ">=3.12,<3.13"
+dependencies = [
+    "joblib",
+    "mediapipe",
+    "numpy",
+    "pillow",
+    "scikit-learn",
+]
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
@@ -37,6 +44,9 @@ types = { cmd = "ty check" }
 test = { cmd = "pytest" }
 pre-commit = { cmd="pre-commit run --all-files" }
 pre-commit-install = { cmd="pre-commit install" }
+build = { cmd = "python -m build" }
+publish-test = { cmd = "twine upload --repository testpypi --verbose dist/*" }
+publish = { cmd = "twine upload dist/*" }
 all = { depends-on = ["fmt", "lint", "types", "test"] }
 
 [tool.pixi.feature.dev.dependencies]
@@ -47,6 +57,8 @@ pre-commit = ">=4.2"
 
 [tool.pixi.feature.dev.pypi-dependencies]
 ty = "*"
+build = "*"
+twine = "*"
 
 [tool.ruff]
 line-length = 100
